@@ -1,0 +1,13 @@
+**/bin/
+**/obj/
+.vs/
+.idea/
+.vscode/
+.tools/
+*.user
+*.suo
+*.db
+*.db-shm
+*.db-wal
+TestResults/
+coverage/

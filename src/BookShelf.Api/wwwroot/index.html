@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="BookShelf, sua biblioteca de leitura pessoal." />
+  <title>BookShelf | Reading workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="BookShelf - in&iacute;cio">
+      <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span><strong>BookShelf</strong><small>READING WORKSPACE</small></span>
+    </a>
+    <nav><a href="#library">Minha biblioteca</a><a href="/swagger" target="_blank">API Docs</a></nav>
+    <button class="button primary" data-open-modal><span>+</span> Adicionar livro</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">SUA JORNADA DE LEITURA</p>
+        <h1>Leia com inten&ccedil;&atilde;o.<br><em>Evolua com const&acirc;ncia.</em></h1>
+        <p class="hero-copy">Organize sua estante, acompanhe o progresso e transforme cada p&aacute;gina em conhecimento.</p>
+      </div>
+      <div class="quote-card">
+        <span class="quote-mark">&ldquo;</span>
+        <blockquote>Um leitor vive mil vidas antes de morrer.</blockquote>
+        <small>&mdash; George R. R. Martin</small>
+        <div class="quote-lines"><i></i><i></i><i></i></div>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Resumo da biblioteca">
+      <article><span class="stat-icon orange">&#9638;</span><div><strong id="stat-total">&mdash;</strong><small>Livros na estante</small></div></article>
+      <article><span class="stat-icon blue">&#9673;</span><div><strong id="stat-reading">&mdash;</strong><small>Lendo agora</small></div></article>
+      <article><span class="stat-icon green">&#10003;</span><div><strong id="stat-completed">&mdash;</strong><small>Conclu&iacute;dos</small></div></article>
+      <article><span class="stat-icon purple">&#11088;</span><div><strong id="stat-pages">&mdash;</strong><small>P&aacute;ginas lidas</small></div></article>
+    </section>
+
+    <section class="library" id="library">
+      <div class="section-heading">
+        <div><p class="eyebrow">COLE&Ccedil;&Atilde;O PESSOAL</p><h2>Minha biblioteca</h2></div>
+        <p id="result-count" class="result-count"></p>
+      </div>
+      <div class="toolbar">
+        <label class="search"><span>&#9906;</span><input id="search" type="search" placeholder="Buscar por t&iacute;tulo ou autor..." /></label>
+        <div class="filters" role="group" aria-label="Filtrar por status">
+          <button class="filter active" data-status="">Todos</button>
+          <button class="filter" data-status="Reading">Lendo</button>
+          <button class="filter" data-status="Completed">Conclu&iacute;dos</button>
+          <button class="filter" data-status="WantToRead">Quero ler</button>
+          <button class="filter" data-status="Paused">Pausados</button>
+        </div>
+      </div>
+      <div id="state" class="state" hidden></div>
+      <div id="books" class="book-grid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <dialog id="book-dialog">
+    <form id="book-form" method="dialog">
+      <div class="modal-header"><div><p class="eyebrow">NOVA LEITURA</p><h2 id="modal-title">Adicionar livro</h2></div><button type="button" class="icon-button" data-close aria-label="Fechar">&times;</button></div>
+      <input type="hidden" id="book-id" />
+      <div class="form-grid">
+        <label class="wide">T&iacute;tulo <input name="title" required minlength="2" maxlength="160" /></label>
+        <label>Autor <input name="author" required minlength="2" maxlength="120" /></label>
+        <label>G&ecirc;nero <input name="genre" required minlength="2" maxlength="80" /></label>
+        <label>ISBN <input name="isbn" maxlength="17" placeholder="9780134494166" /></label>
+        <label>Status <select name="status"><option value="WantToRead">Quero ler</option><option value="Reading">Lendo</option><option value="Completed">Conclu&iacute;do</option><option value="Paused">Pausado</option></select></label>
+        <label>Total de p&aacute;ginas <input name="totalPages" type="number" min="1" max="20000" required /></label>
+        <label>P&aacute;ginas lidas <input name="pagesRead" type="number" min="0" max="20000" required value="0" /></label>
+        <label>Avalia&ccedil;&atilde;o <select name="rating"><option value="">Sem nota</option><option value="5">5 estrelas</option><option value="4">4 estrelas</option><option value="3">3 estrelas</option><option value="2">2 estrelas</option><option value="1">1 estrela</option></select></label>
+        <label class="wide">Anota&ccedil;&otilde;es <textarea name="notes" rows="3" maxlength="1000"></textarea></label>
+      </div>
+      <div id="form-error" class="form-error" hidden></div>
+      <div class="modal-actions"><button type="button" class="button ghost" data-close>Cancelar</button><button type="submit" class="button primary" id="save-button">Salvar livro</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>

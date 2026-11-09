@@ -1,0 +1,25 @@
+@host = http://localhost:5097
+
+### List and filter books
+GET {{host}}/api/books?status=Reading&page=1&pageSize=12
+Accept: application/json
+
+### Library summary
+GET {{host}}/api/books/summary
+Accept: application/json
+
+### Create a book
+POST {{host}}/api/books
+Content-Type: application/json
+
+{
+  "title": "Accelerate",
+  "author": "Nicole Forsgren, Jez Humble & Gene Kim",
+  "isbn": "9781942788331",
+  "genre": "Engineering",
+  "totalPages": 288,
+  "pagesRead": 0,
+  "status": "WantToRead",
+  "rating": null,
+  "notes": "Next book in the reading plan."
+}
