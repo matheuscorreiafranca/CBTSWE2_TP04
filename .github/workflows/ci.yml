@@ -8,6 +8,8 @@ on:
 
 jobs:
   quality:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,9 +18,48 @@ jobs:
           dotnet-version: 8.0.x
           cache: true
           cache-dependency-path: '**/*.csproj'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/demo/package-lock.json
+      - name: Install browser recorder
+        run: npm ci
+        working-directory: tools/demo
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+        working-directory: tools/demo
       - name: Restore
         run: dotnet restore BookShelf.sln
       - name: Build
         run: dotnet build BookShelf.sln --configuration Release --no-restore --warnaserror
       - name: Test
         run: dotnet test BookShelf.sln --configuration Release --no-build --logger "console;verbosity=normal"
+      - name: Start application for demo recording
+        run: |
+          dotnet run --no-build --configuration Release --project src/BookShelf.Api --urls http://127.0.0.1:5097 > /tmp/bookshelf-api.log 2>&1 &
+          echo $! > /tmp/bookshelf-api.pid
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:5097/api/books/summary > /dev/null; then exit 0; fi
+            sleep 2
+          done
+          cat /tmp/bookshelf-api.log
+          exit 1
+      - name: Record integrated product demo
+        run: node tools/demo/record-demo.cjs
+      - name: Upload presentation video
+        uses: actions/upload-artifact@v4
+        with:
+          name: bookshelf-presentation-video
+          path: docs/video/BookShelf-demo.webm
+          if-no-files-found: error
+          retention-days: 30
+      - name: Commit presentation video
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/video/BookShelf-demo.webm
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "docs: add recorded product demonstration"
+          git push

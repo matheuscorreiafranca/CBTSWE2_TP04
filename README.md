@@ -178,7 +178,9 @@ O workflow [CI](./.github/workflows/ci.yml) restaura, compila com warnings como 
 
 ## Vídeo demonstrativo
 
-O roteiro de gravação está em [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md). Antes da entrega acadêmica, publique o vídeo na plataforma indicada pelo professor e substitua esta frase pelo link final.
+[▶ Assistir à apresentação do BookShelf](./docs/video/BookShelf-demo.webm)
+
+O vídeo percorre a biblioteca, filtros, cadastro, edição do progresso e exclusão. A gravação é gerada na CI com a API ASP.NET Core e SQLite em execução. O roteiro acadêmico está em [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md).
 
 ## Licença
 

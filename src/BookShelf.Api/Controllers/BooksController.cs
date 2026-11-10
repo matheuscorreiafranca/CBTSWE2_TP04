@@ -26,7 +26,7 @@ public sealed class BooksController(LibraryDbContext db) : ControllerBase
         }
         if (status.HasValue) query = query.Where(book => book.Status == status);
         var total = await query.CountAsync(cancellationToken);
-        var books = await query.OrderByDescending(book => book.UpdatedAt).Skip((page - 1) * pageSize)
+        var books = await query.OrderBy(book => book.Title).Skip((page - 1) * pageSize)
             .Take(pageSize).ToListAsync(cancellationToken);
         return Ok(new PagedResponse<BookResponse>(books.Select(ToResponse).ToList(), total, page, pageSize,
             Math.Max(1, (int)Math.Ceiling(total / (double)pageSize))));
